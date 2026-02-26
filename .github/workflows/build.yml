@@ -1,0 +1,26 @@
+name: CI
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # 1. Установка и сборка APK
+      - name: Build with Buildozer
+        uses: ArtemSBulgakov/buildozer-action-v1
+        id: buildozer
+        with:
+          command: buildozer android debug
+          buildozer_version: stable
+
+      # 2. Загрузка готового файла, чтобы ты мог его скачать
+      - name: Upload APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: package
+          path: bin/*.apk
